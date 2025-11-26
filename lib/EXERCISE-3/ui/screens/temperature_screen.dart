@@ -1,7 +1,24 @@
-import 'package:flutter/material.dart';
+import 'dart:ui_web';
 
-class TemperatureScreen extends StatelessWidget {
-  TemperatureScreen({super.key});
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+class TemperatureScreen extends StatefulWidget {
+  const TemperatureScreen({super.key});
+
+  @override
+  State<TemperatureScreen> createState() => _TemperatureScreenState();
+}
+
+class _TemperatureScreenState extends State<TemperatureScreen> {
+  final _textController = TextEditingController();
+  double _fahrenheit = 0;
+
+  void _onComplete() {
+    setState(() {
+      _fahrenheit = double.parse(_textController.text) * (9 / 5) + 32;
+    });
+  }
 
   final InputDecoration inputDecoration = InputDecoration(
     enabledBorder: OutlineInputBorder(
@@ -37,8 +54,24 @@ class TemperatureScreen extends StatelessWidget {
             const SizedBox(height: 10),
             TextField(
               decoration: inputDecoration,
+              controller: _textController,
               style: const TextStyle(color: Colors.white),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+              ],
             ),
+            const SizedBox(height: 30),
+            SizedBox(
+              height: 45,
+              child: ElevatedButton(
+                onPressed: () {
+                  _onComplete();
+                },
+                child: Text("Convert", style: TextStyle(fontSize: 16)),
+              ),
+            ),
+
             const SizedBox(height: 30),
             const Text("Temperature in Fahrenheit:"),
             const SizedBox(height: 10),
@@ -48,7 +81,7 @@ class TemperatureScreen extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Text('test'),
+              child: Text("$_fahrenheit"),
             ),
           ],
         ),

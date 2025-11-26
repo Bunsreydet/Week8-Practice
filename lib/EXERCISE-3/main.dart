@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'ui/screens/welcome_screen.dart';
- 
+import '../EXERCISE-3/ui/screens/temperature_screen.dart';
+import '../EXERCISE-3/ui/screens/welcome_screen.dart';
 class TemperatureApp extends StatefulWidget {
   const TemperatureApp({super.key});
 
@@ -12,30 +11,29 @@ class TemperatureApp extends StatefulWidget {
 }
 
 class _TemperatureAppState extends State<TemperatureApp> {
-  
+  bool isStarts = false;
+
+  void onStarted(bool newValue) {
+    setState(() {
+      isStarts = newValue;
+    });
+  }
+
   @override
   Widget build(context) {
-
-    return MaterialApp(
-      home: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xff16C062),
-                Color(0xff00BCDC),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xff16C062), Color(0xff00BCDC)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          child: const WelcomeScreen(),
         ),
+        child: isStarts
+            ? TemperatureScreen()
+            : WelcomeScreen(onChanged: onStarted),
       ),
     );
   }
-}
-
-void main() {
-  runApp(const TemperatureApp());
 }

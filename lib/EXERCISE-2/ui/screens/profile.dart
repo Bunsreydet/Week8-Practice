@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../model/profile_tile_model.dart';
+
 import '../theme/theme.dart';
 
 class ProfileApp extends StatelessWidget {
-  const ProfileApp({super.key});
+  final ProfileData data;
+
+  const ProfileApp({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -17,45 +20,43 @@ class ProfileApp extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(height: 40),
-            const CircleAvatar(
-              radius: 60,
-              backgroundImage: AssetImage(
-                  'assets/images/w8/aang.png'), 
+      body: ListView(
+        children: [
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 40),
+                CircleAvatar(
+                  radius: 60,
+                  backgroundImage: AssetImage(data.avatarUrl),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  data.name,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
+                ),
+                Text(
+                  data.position,
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+                const SizedBox(height: 20),
+
+                ...data.tiles.map(
+                  (title) => ProfileTile(
+                    icon: title.icon,
+                    title: title.title,
+                    data: title.value,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            Text(
-              'Ronan OGOR',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
-              ),
-            ),
-            const Text(
-              'Flutter Developer',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 20),
-            const ProfileTile(
-              icon: Icons.phone,
-              title: "Phone Number",
-              data: "+123 456 7890",
-            ),
-             const ProfileTile(
-              icon: Icons.location_on,
-              title: "Address",
-              data: "Cambodia",
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
